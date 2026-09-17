@@ -25,6 +25,11 @@ public class BookingScheduler {
             throw new RuntimeException("Booking should be on the hour.");
         }
 
+        // 일요일에는 시스템을 오픈하지 않는다.
+        if (getNow().getDayOfWeek() == DayOfWeek.SUNDAY) {
+            throw new RuntimeException("Booking system is not available on sunday");
+        }
+
         // 시간당 예약인원을 초과할 경우 RuntimeException 발생
         int numberOfPeople = schedule.getNumberOfPeople();
         for (Schedule bookedSchedule : schedules) {
@@ -35,15 +40,6 @@ public class BookingScheduler {
         if (numberOfPeople > capacityPerHour) {
             throw new RuntimeException("Number of people is over restaurant capacity per hour");
         }
-			
-
-		/*
-		// 일요일에는 시스템을 오픈하지 않는다.
-		LocalDateTime now = LocalDateTime.now();
-		if(now.getDayOfWeek() == DayOfWeek.SUNDAY){
-			throw new RuntimeException("Booking system is not available on sunday");
-		}
-		*/
 
         schedules.add(schedule);
 
@@ -65,5 +61,9 @@ public class BookingScheduler {
 
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
+    }
+
+    public LocalDateTime getNow() {
+        return LocalDateTime.now();
     }
 }
